@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "version": "0.0.0",
+  "name": "example",
+  "devDependencies": {
+    "eslint": "^8.49.0",
+    "jest": "*"
+  },
+  "scripts": {
+    "test": "jest"
+  }
+}
