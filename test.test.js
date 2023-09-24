@@ -1,14 +1,48 @@
-const criarPokemon = require('./src/main.js');
+const calcularPontuacao = require('./src/main.js');
 
-test('A função criarPokemon existe', () => {
-  expect(criarPokemon).toBeDefined()
-  expect(typeof criarPokemon).toBe("function");
+const createDesempenho = (time, vitorias, empates, derrotas) => ({ time, vitorias, empates, derrotas})
+
+test('A função calcularPontuacao existe', () => {
+  expect(calcularPontuacao).toBeDefined()
+  expect(typeof calcularPontuacao).toBe("function");
 });
 
-test('Criando um Pikachu', () => {
-  const meuPokemon = criarPokemon("Pikachu", "Elétrico", 25, 80);
-  expect(meuPokemon.nome).toBe("Pikachu");
-  expect(meuPokemon.tipo).toBe("Elétrico");
-  expect(meuPokemon.nivel).toBe(25);
-  expect(meuPokemon.hp).toBe(80);
+test('Números de inválidos', () => {
+  let desempenho = createDesempenho("invalido", -10, 3, 0)
+  expect(() => calcularPontuacao(desempenho)).toThrow()
+
+  desempenho = createDesempenho("invalido", 5, -1, 0)
+  expect(() => calcularPontuacao(desempenho)).toThrow()
+
+  desempenho = createDesempenho("invalido", 20, 2, -5)
+  expect(() => calcularPontuacao(desempenho)).toThrow()
+
+  desempenho = createDesempenho("invalido", 5, 1.2, 0)
+  expect(() => calcularPontuacao(desempenho)).toThrow()
+
+  desempenho = createDesempenho("invalido", 20, 2, 5.4)
+  expect(() => calcularPontuacao(desempenho)).toThrow()
+
+  desempenho = createDesempenho("invalido", 2.3, 2, 0)
+  expect(() => calcularPontuacao(desempenho)).toThrow()
+})
+
+test('Time invicto', () => {
+  const desempenho = createDesempenho("AFC", 10, 0, 0);
+  expect(calcularPontuacao(desempenho)).toBe(30)
+});
+
+test('Time que só perde', () => {
+  const desempenho = createDesempenho("Ibiss", 0, 0, 10);
+  expect(calcularPontuacao(desempenho)).toBe(0)
+});
+
+test('Time que só empata', () => {
+  const desempenho = createDesempenho("Empate clube", 0, 100, 0);
+  expect(calcularPontuacao(desempenho)).toBe(100)
+});
+
+test('Time campeão', () => {
+  const desempenho = createDesempenho("CFC", 34.0, 1.0, 1.0);
+  expect(calcularPontuacao(desempenho)).toBe(3*34 + 1)
 });
